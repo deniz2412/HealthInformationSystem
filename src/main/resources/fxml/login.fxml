@@ -28,7 +28,7 @@
          <children>
             <Pane fx:id="loginPane" layoutX="35.0" layoutY="83.0" prefHeight="262.0" prefWidth="246.0" style="-fx-background-color: #0B0C13ff;">
                <children>
-                  <JFXPasswordField fx:id="passwordTextFieldLogin" layoutX="56.0" layoutY="106.0" promptText="password" />
+                  <JFXPasswordField fx:id="passwordTextField" layoutX="56.0" layoutY="106.0" promptText="password" />
                   <JFXButton fx:id="LoginButton" onAction="#handleLoginButtonAction" layoutX="97.0" layoutY="149.0" mnemonicParsing="false" ripplerFill="BLACK" text="Sign In" />
                   <JFXTextField fx:id="usernameTextField" layoutX="56.0" layoutY="71.0" promptText="username" />
                </children>
@@ -39,7 +39,8 @@
                      <JFXButton fx:id="createUserButton" onAction="#handleUserCreation" layoutX="95.0" layoutY="175.0" mnemonicParsing="false" ripplerFill="BLACK" text="Sign Up" />
                      <JFXTextField fx:id="newUsernameField" layoutX="55.0" layoutY="40.0" promptText="username" />
                      <JFXComboBox fx:id="comboboxRole" layoutX="55.0" layoutY="125.0" prefHeight="25.0" prefWidth="135.0" promptText="role" />
-                 </children></Pane>
+                 </children>
+             </Pane>
          </children>
       </AnchorPane>
     </children>

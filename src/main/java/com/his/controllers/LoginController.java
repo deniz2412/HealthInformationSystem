@@ -1,8 +1,8 @@
 package com.his.controllers;
 
+import com.his.repository.UserRepository;
 import com.jfoenix.controls.*;
 import com.his.model.User;
-import com.his.repository.UserRepository;
 import com.his.util.PasswordUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +24,7 @@ public class LoginController implements Initializable {
     @FXML
     private JFXTextField usernameTextField;
     @FXML
-    private JFXTextField passwordTextField;
+    private JFXPasswordField passwordTextField;
     @FXML
     private JFXTextField newUsernameField;
     @FXML
@@ -34,11 +34,11 @@ public class LoginController implements Initializable {
     @FXML
     private Pane createAccountPane;
     private Stage primaryStage;
+    UserRepository userRepository = new UserRepository();
 
     @FXML
     private JFXComboBox<String> comboboxRole;
 
-    UserRepository userRepository = new UserRepository();
     public void setPrimaryStage(Stage primaryStage){
         this.primaryStage = primaryStage;
     }
@@ -55,21 +55,19 @@ public class LoginController implements Initializable {
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
 
-        //Auth
         User user = userRepository.getUserByUsername(username);
-
         if (user != null) {
             String storedPasswordHash = user.getPasswordHash();
             byte[] salt = user.getSalt();
             boolean passwordMatch = PasswordUtil.verifyPassword(password, storedPasswordHash, salt);
             if (passwordMatch) {
                 String role = user.getRole();
-                showMainApplicationScreen(role);
+                showMainApplicationScreen(role, event);
             } else {
-                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid password");
+                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password");
             }
         }else{
-                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username");
+                showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password");
             }
     }
     public void showCreateAccountPane(ActionEvent event) {
@@ -86,23 +84,56 @@ public class LoginController implements Initializable {
         String password = newPasswordField.getText();
         String role = comboboxRole.getValue();
 
-        System.out.println(role);
+
         //Check if user exists
         User existingUser = userRepository.getUserByUsername(username);
         if(existingUser!=null){
             showAlert(Alert.AlertType.ERROR, "Account Creation Failed", "Username already exists.");
+        }else{
+            byte[] salt = PasswordUtil.generateSalt();
+            String passwordHash = PasswordUtil.hashPassword(password,salt);
+            User newUser = new User(username, passwordHash,salt, role);
+            try{
+                userRepository.saveUser(newUser);
+                showAlert(Alert.AlertType.INFORMATION, "Account Creation Successful", "Account created successfully!");
+            } catch(Exception e)
+            {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Account Creation Failed", "Failed to create the account. Please try again.");
+            }
         }
+    }
 
-        User newUser = userRepository.createUser(username, password, role);
-        if (newUser != null) {
-            showAlert(Alert.AlertType.INFORMATION, "Account Creation Successful", "Account created successfully!");
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Account Creation Failed", "Failed to create the account. Please try again.");
-        }
-        }
 
-        private void showMainApplicationScreen(String role){
+        private void showMainApplicationScreen(String role, ActionEvent event){
+            try {
+                FXMLLoader loader;
+                if (role.equals("Doctor")) {
+                    loader = new FXMLLoader(getClass().getResource("doctorMain.fxml"));
+                } else if (role.equals("Patient")) {
+                    loader = new FXMLLoader(getClass().getResource("patientMain.fxml"));
+                } else if (role.equals("Admin")) {
+                    loader = new FXMLLoader(getClass().getResource("adminMain.fxml"));
+                } else if (role.equals("Pharmacy")) {
+                    loader = new FXMLLoader(getClass().getResource("pharmacyMain.fxml"));
+                } else {
+                    // Handle unknown role or error case
+                    return;
+                }
+                Parent nextPage = loader.load();
+                Scene scene = new Scene(nextPage);
 
+                // Get the current stage
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+                // Set the new scene on the stage
+                currentStage.setScene(scene);
+                currentStage.show();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                // Handle any exceptions that occur while loading the page
+            }
         }
 
         private void showAlert(Alert.AlertType alertType, String title, String message){

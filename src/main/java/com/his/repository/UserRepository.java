@@ -1,69 +1,81 @@
 package com.his.repository;
 
 import com.his.model.User;
-import com.his.util.PasswordUtil;
+import jakarta.persistence.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 public class UserRepository {
-    private Connection connection = null;
-    private PreparedStatement statement = null;
-    private ResultSet resultSet = null;
+
+    private EntityManagerFactory entityManagerFactory;
+    private EntityManager entityManager;
+
+    public UserRepository() {
+        // Create the EntityManagerFactory
+        entityManagerFactory = Persistence.createEntityManagerFactory("hisDB");
+
+        // Create the EntityManager
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    private EntityManager getEntityManager() {
+        return entityManagerFactory.createEntityManager();
+    }
     public User getUserByUsername(String username) {
+        entityManager = getEntityManager();
         try {
-            connection = DatabaseConnector.getConnection();
-            String query = "SELECT * FROM users WHERE username = ?";
-            statement = connection.prepareStatement(query);
-            statement.setString(1, username);
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                // User found, retrieve the password hash and salt
-                String passwordHash = resultSet.getString("password_hash");
-                byte[] salt = resultSet.getBytes("salt");
-                String role = resultSet.getString("role");
-                return new User(username, passwordHash, salt, role);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            String query = "SELECT u FROM User u WHERE u.username = :username";
+            return entityManager.createQuery(query, User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        }catch (NoResultException e) {
+            return null; // Return null when no result is found
         } finally {
-            closeDB();
-
+            entityManager.close();
         }
-        return null; // User not found or error occurred
+
     }
 
-    public User createUser(String username, String password, String role){
-        byte[] salt = PasswordUtil.generateSalt();
-        String passwordHash = PasswordUtil.hashPassword(password,salt);
-        try{
-            connection = DatabaseConnector.getConnection();
-            String query = "INSERT INTO users (username, password_hash, salt, role) VALUES (?, ?, ?, ?)";
-            statement = connection.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, passwordHash);
-            statement.setBytes(3, salt);
-            statement.setString(4, role);
+    public List<User> getAllUsers() {
+        String query = "SELECT u FROM User u";
+        return entityManager.createQuery(query, User.class)
+                .getResultList();
+    }
 
-            int rowsAffected = statement.executeUpdate();
-
-            if(rowsAffected > 0){
-                return new User(username,passwordHash,salt,role);
+    public void saveUser(User user) {
+        EntityManager em = getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            em.persist(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
             }
-        }catch(SQLException e){
-            e.printStackTrace();
+            throw e;
         } finally {
-            closeDB();
+            em.close();
         }
-        return null; //User creation failed
     }
 
-    private void closeDB(){
-        DatabaseConnector.closeResultSet(resultSet);
-        DatabaseConnector.closeStatement(statement);
-        DatabaseConnector.closeConnection(connection);
+    public void updateUser(User user) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        entityManager.merge(user);
+        transaction.commit();
     }
+
+    public void deleteUser(User user) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        entityManager.remove(user);
+        transaction.commit();
+    }
+
+    public void close() {
+        entityManager.close();
+        entityManagerFactory.close();
+    }
+
 }
-

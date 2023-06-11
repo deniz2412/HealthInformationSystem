@@ -1,9 +1,15 @@
 package com.his.model;
 
-import javafx.scene.control.TextField;
+import jakarta.persistence.*;
+import java.util.UUID;
 
+@Entity
+@Table(name = "users")
 public class User {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    UUID id;
     private String username;
     private String passwordHash;
     private byte[] salt;
@@ -15,7 +21,15 @@ public class User {
         this.salt = salt;
         this.role = role;
     }
+    public User() {
+    }
 
+    public UUID getId() {
+        return id;
+    }
+    public void setId(UUID id) {
+        this.id = id;
+    }
     public String getUsername() {
         return username;
     }
