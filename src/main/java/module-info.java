@@ -10,8 +10,13 @@ module com.his.healthinformationsystem {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires java.sql;
+    requires com.jfoenix;
 
 
-    opens com.his.healthinformationsystem to javafx.fxml;
-    exports com.his.healthinformationsystem;
+    opens com.his to javafx.fxml;
+    exports com.his;
+    opens com.his.controllers to javafx.fxml;
+    exports com.his.controllers;
+
 }
