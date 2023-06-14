@@ -5,12 +5,11 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-public class UserRepository {
-
+public class AppointmentRepository {
     private EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
-    public UserRepository() {
+    public AppointmentRepository() {
         // Create the EntityManagerFactory
         entityManagerFactory = Persistence.createEntityManagerFactory("hisDB");
 
@@ -21,6 +20,7 @@ public class UserRepository {
     private EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();
     }
+
     public User getUserByUsername(String username) {
         entityManager = getEntityManager();
         try {
@@ -77,5 +77,4 @@ public class UserRepository {
         entityManager.close();
         entityManagerFactory.close();
     }
-
 }

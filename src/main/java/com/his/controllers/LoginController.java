@@ -44,9 +44,7 @@ public class LoginController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        comboboxRole.getItems().add("Admin");
         comboboxRole.getItems().add("Doctor");
-        comboboxRole.getItems().add("Pharmacist");
         comboboxRole.getItems().add("Patient");
     }
 
@@ -109,15 +107,11 @@ public class LoginController implements Initializable {
             try {
                 FXMLLoader loader;
                 if (role.equals("Doctor")) {
-                    loader = new FXMLLoader(getClass().getResource("doctorMain.fxml"));
+                    loader = new FXMLLoader(getClass().getResource("doctor.fxml"));
                 } else if (role.equals("Patient")) {
-                    loader = new FXMLLoader(getClass().getResource("patientMain.fxml"));
-                } else if (role.equals("Admin")) {
-                    loader = new FXMLLoader(getClass().getResource("adminMain.fxml"));
-                } else if (role.equals("Pharmacy")) {
-                    loader = new FXMLLoader(getClass().getResource("pharmacyMain.fxml"));
+                    loader = new FXMLLoader(getClass().getResource("patient.fxml"));
                 } else {
-                    // Handle unknown role or error case
+                    showAlert(Alert.AlertType.ERROR, "Unkown role", "You have been assigned an unknown role, contact IT!");
                     return;
                 }
                 Parent nextPage = loader.load();

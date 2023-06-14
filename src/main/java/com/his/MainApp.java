@@ -13,13 +13,14 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         //login
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/doctor.fxml"));
         Parent root = loader.load();
 
-        LoginController loginController = loader.getController();
-        loginController.setPrimaryStage(primaryStage);
+        //LoginController loginController = loader.getController();
+        //loginController.setPrimaryStage(primaryStage);
 
         Scene scene = new Scene(root);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Asclepius Hospital Information System");
         primaryStage.show();
