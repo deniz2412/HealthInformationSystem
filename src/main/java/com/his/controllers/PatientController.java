@@ -3,6 +3,7 @@ package com.his.controllers;
 
 import com.his.model.Appointment;
 import com.his.model.Prescription;
+import com.his.repository.AppointmentRepository;
 import com.his.util.JFoenixTableUtils;
 
 import com.jfoenix.controls.JFXTreeTableColumn;
@@ -24,6 +25,8 @@ public class PatientController implements Initializable {
     private JFXTreeTableView tableView;
     private Stage primaryStage;
 
+    AppointmentRepository appointmentRepository = new AppointmentRepository();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showAppointments();
@@ -34,8 +37,8 @@ public class PatientController implements Initializable {
         List<String> columnNames = Arrays.asList("ID", "Patient", "Doctor");
         List<String> propertyNames = Arrays.asList("id", "patientName", "doctorName");
 
-        List<Appointment> appointmentList= new ArrayList<>();
-        appointmentList.add(new Appointment(56,2512,"Test","Doc"));
+        List<Appointment> appointmentList= appointmentRepository.getAllAppointments();
+        //appointmentList.add(new Appointment(56,2512,"Test","Doc"));
 
         JFoenixTableUtils<Appointment> appointmentTableUtils = new JFoenixTableUtils<>();
         appointmentTableUtils.generateColumns(tableView, columnNames, propertyNames);
