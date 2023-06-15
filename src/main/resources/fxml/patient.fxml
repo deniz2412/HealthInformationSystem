@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import org.controlsfx.control.tableview2.TableView2?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1360.0" style="-fx-background-color: #02030A;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.his.controllers.PatientController">
     <children>
         <VBox prefHeight="768.0" prefWidth="260.0" style="-fx-background-color: #05071F;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -14,16 +15,16 @@
                 <ImageView fitHeight="314.0" fitWidth="257.0" opacity="0.36" pickOnBounds="true" preserveRatio="true">
                     <Image url="@../images/logo.jpg" />
                 </ImageView>
-                <JFXButton prefHeight="55.0" prefWidth="260.0" text="Schedule Appointment" onAction="#showAppointmentsForm" />
-                <JFXButton prefHeight="55.0" prefWidth="260.0" text="View Scheduled Appointments" onAction="#showAppointments" />
-                <JFXButton prefHeight="55.0" prefWidth="260.0" text="View Received Prescriptions" onAction="#showPrescription" />
-                <JFXButton prefHeight="55.0" prefWidth="260.0" text="View Received Referrals" onAction="#showReferrals" />
-                <JFXButton prefHeight="55.0" prefWidth="260.0" text="Order Prescription" onAction="#showPrescriptionOrder" />
+                <JFXButton onAction="#showAppointmentsForm" prefHeight="55.0" prefWidth="260.0" text="Schedule Appointment" />
+                <JFXButton onAction="#showAppointments" prefHeight="55.0" prefWidth="260.0" text="View Scheduled Appointments" />
+                <JFXButton onAction="#showPrescription" prefHeight="55.0" prefWidth="260.0" text="View Received Prescriptions" />
+                <JFXButton onAction="#showReferrals" prefHeight="55.0" prefWidth="260.0" text="View Received Referrals" />
+                <JFXButton onAction="#showPrescriptionOrder" prefHeight="55.0" prefWidth="260.0" text="Order Prescription" />
             </children>
         </VBox>
         <StackPane layoutX="258.0" prefHeight="768.0" prefWidth="1100.0" style="-fx-background-color: #02030A;">
             <children>
-                <Pane fx:id="pnlOverview" prefHeight="775.0" prefWidth="1070.0">
+                <Pane fx:id="panelOne" prefHeight="775.0" prefWidth="1070.0">
                     <children>
                         <TextField layoutX="875.0" layoutY="48.0" prefHeight="27.0" prefWidth="183.0" promptText="search" style="-fx-background-color: #02030A; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" />
                         <Label layoutX="45.0" layoutY="41.0" prefHeight="42.0" prefWidth="228.0" text="Patient Dashboard" textFill="#e7e5e5">
@@ -35,7 +36,7 @@
                             <children>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="149.0">
                                     <children>
-                                        <Label text="22000" textFill="#2a73ff">
+                                        <Label fx:id="pendingAppointments" text="22000" textFill="#2a73ff">
                                             <font>
                                                 <Font name="System Bold" size="26.0" />
                                             </font>
@@ -45,7 +46,7 @@
                                 </VBox>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                     <children>
-                                        <Label text="1500" textFill="#26bfbc">
+                                        <Label fx:id="pendingPrescriptions" text="1500" textFill="#26bfbc">
                                             <font>
                                                 <Font name="System Bold" size="26.0" />
                                             </font>
@@ -55,17 +56,17 @@
                                 </VBox>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                     <children>
-                                        <Label text="1000" textFill="#fa5f7e">
+                                        <Label fx:id="pendingReferrals" text="1000" textFill="#fa5f7e">
                                             <font>
                                                 <Font name="System Bold" size="26.0" />
                                             </font>
                                         </Label>
-                                        <Label text="Pending Referrals" textAlignment="CENTER" textFill="#e7e5e5" wrapText="true" />
+                                        <Label prefHeight="33.0" prefWidth="93.0" text="Pending Referrals" textAlignment="CENTER" textFill="#e7e5e5" wrapText="true" />
                                     </children>
                                 </VBox>
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                     <children>
-                                        <Label text="780" textFill="#de0000">
+                                        <Label fx:id="orderedPrescriptions" text="780" textFill="#de0000">
                                             <font>
                                                 <Font name="System Bold" size="26.0" />
                                             </font>
@@ -77,14 +78,9 @@
                         </HBox>
                     </children> 
                 </Pane>
-                <Pane prefHeight="200.0" prefWidth="200.0">
+                <Pane fx:id="panelTwo" prefHeight="200.0" prefWidth="200.0">
                     <children>
-                        <JFXTreeTableView fx:id="editableTreeTableView" layoutX="55.0" layoutY="230.0" prefHeight="500.0" prefWidth="1000.0">
-                            <columns>
-                                <JFXTreeTableColumn fx:id="firstNameEditableColumn" minWidth="96.0" prefWidth="96.0" resizable="false" text="First Name" />
-                                <JFXTreeTableColumn fx:id="lastNameEditableColumn" minWidth="0.0" prefWidth="727.0" text="Last Name" />
-                                <JFXTreeTableColumn fx:id="ageEditableColumn" maxWidth="762.0" minWidth="-1.0" prefWidth="205.0" resizable="false" text="Age" />
-                            </columns>
+                        <JFXTreeTableView fx:id="tableView" layoutX="55.0" layoutY="230.0" prefHeight="500.0" prefWidth="1000.0">
                         </JFXTreeTableView>
                     </children>
                 </Pane>
