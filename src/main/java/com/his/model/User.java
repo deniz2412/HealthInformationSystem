@@ -14,6 +14,11 @@ public class User {
     private String passwordHash;
     private byte[] salt;
     private String role;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Doctor doctor;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Patient patient;
+
 
     public User(String username, String passwordHash, byte[] salt, String role) {
         this.username = username;
@@ -60,5 +65,21 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

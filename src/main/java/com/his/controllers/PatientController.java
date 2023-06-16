@@ -1,9 +1,10 @@
 package com.his.controllers;
 
 
-import com.his.model.Appointment;
-import com.his.model.Prescription;
+import com.his.model.*;
 import com.his.repository.AppointmentRepository;
+import com.his.repository.PrescriptionRepository;
+import com.his.repository.ReferralsRepository;
 import com.his.util.JFoenixTableUtils;
 
 import com.jfoenix.controls.JFXTreeTableColumn;
@@ -25,26 +26,40 @@ public class PatientController implements Initializable {
     private JFXTreeTableView tableView;
     private Stage primaryStage;
 
+    private User user;
     AppointmentRepository appointmentRepository = new AppointmentRepository();
+    ReferralsRepository referralsRepository = new ReferralsRepository();
+    PrescriptionRepository prescriptionRepository = new PrescriptionRepository();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showAppointments();
     }
 
+    public PatientController(User user) {
+        this.user = user;
+    }
+
+    public PatientController() {
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void showAppointments(){
         tableView.getColumns().clear();
-        List<String> columnNames = Arrays.asList("ID", "Patient", "Doctor");
-        List<String> propertyNames = Arrays.asList("id", "patientName", "doctorName");
+        List<String> columnNames = Arrays.asList("ID", "Patient", "Doctor","Date","Time");
+        List<String> propertyNames = Arrays.asList("id", "patientName", "doctorName","date", "time");
 
-        List<Appointment> appointmentList= appointmentRepository.getAllAppointments();
-        //appointmentList.add(new Appointment(56,2512,"Test","Doc"));
-
+        List<Appointment> appointmentList= appointmentRepository.getAllAppointments(user);
+        for (Appointment appointment: appointmentList) {
+            appointment.setPatientName(appointment.getPatient().getName());
+            appointment.setDoctorName(appointment.getDoctor().getName());
+        };
         JFoenixTableUtils<Appointment> appointmentTableUtils = new JFoenixTableUtils<>();
         appointmentTableUtils.generateColumns(tableView, columnNames, propertyNames);
         appointmentTableUtils.populateTableData(tableView, appointmentList);
-
-        System.out.println(tableView.getColumns());
 
     }
 
@@ -56,21 +71,29 @@ public class PatientController implements Initializable {
 
     public void showPrescription(){
         tableView.getColumns().clear();
-        List<String> columnNames = Arrays.asList("ID", "Medication", "Reason");
-        List<String> propertyNames = Arrays.asList("id", "medication", "reason");
+        List<String> columnNames = Arrays.asList("ID", "Medication","Reason","Status");
+        List<String> propertyNames = Arrays.asList("id", "medication", "reason", "status");
 
-        List<Prescription> prescriptionList= new ArrayList<>();
-        prescriptionList.add(new Prescription(55,"Test","Doc"));
-
+        List<Prescription> prescriptionList= prescriptionRepository.getPrescriptions(user);
         JFoenixTableUtils<Prescription> prescriptionJFoenixTableUtils = new JFoenixTableUtils<>();
         prescriptionJFoenixTableUtils.generateColumns(tableView, columnNames, propertyNames);
         prescriptionJFoenixTableUtils.populateTableData(tableView, prescriptionList);
 
-        System.out.println(tableView.getColumns());
-
     }
 
     public void showReferrals(){
+        tableView.getColumns().clear();
+        List<String> columnNames = Arrays.asList("ID", "Doctor","Reason");
+        List<String> propertyNames = Arrays.asList("id","doctorname", "refferalReason");
+
+        List<Referral> referralList= referralsRepository.getReferrals(user);
+        for (Referral referral: referralList) {
+            referral.setPatientName(referral.getPatient().getName());
+            referral.setDoctorName(referral.getDoctor().getName());
+        };
+        JFoenixTableUtils<Referral> referralJFoenixTableUtils = new JFoenixTableUtils<>();
+        referralJFoenixTableUtils.generateColumns(tableView, columnNames, propertyNames);
+        referralJFoenixTableUtils.populateTableData(tableView, referralList);
 
     }
 

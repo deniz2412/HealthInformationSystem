@@ -10,25 +10,25 @@ import java.time.LocalTime;
 @Table(name = "appointments")
 public class Appointment extends RecursiveTreeObject<Appointment> {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    private String patientName;
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
-
+    private String doctorName;
     @Column(name = "date")
     private LocalDate date;
 
     @Column(name = "time")
     private LocalTime time;
 
-    public Appointment(Long id, Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
-        this.id = id;
+    public Appointment(Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
@@ -37,6 +37,22 @@ public class Appointment extends RecursiveTreeObject<Appointment> {
 
     public Appointment() {
 
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 
     public Long getId() {

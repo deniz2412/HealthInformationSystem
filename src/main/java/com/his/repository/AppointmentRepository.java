@@ -1,6 +1,7 @@
 package com.his.repository;
 
 import com.his.model.Appointment;
+import com.his.model.Patient;
 import com.his.model.User;
 import jakarta.persistence.*;
 
@@ -29,8 +30,10 @@ public class AppointmentRepository {
         }
     }
 
-    public List<Appointment> getAllAppointments() {
-        return entityManager.createQuery("SELECT a FROM Appointment a", Appointment.class)
+    public List<Appointment> getAllAppointments(User user) {
+
+        return entityManager.createQuery("SELECT a FROM Appointment a WHERE patient=:patient", Appointment.class)
+                .setParameter("patient",user.getPatient())
                 .getResultList();
     }
 

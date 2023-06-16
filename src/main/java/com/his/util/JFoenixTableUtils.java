@@ -14,9 +14,6 @@ import javafx.scene.layout.Region;
 import java.util.List;
 
 public class JFoenixTableUtils<T extends RecursiveTreeObject<T>> {
-
-
-
     public void generateColumns(JFXTreeTableView<T> table, List<String> columnNames, List<String> propertyNames) {
 
         double tableWidth = table.getWidth();

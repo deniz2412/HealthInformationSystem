@@ -1,23 +1,54 @@
 package com.his.model;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "prescriptions")
 public class Prescription extends RecursiveTreeObject<Prescription> {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "medication")
     private String medication;
+    @Column(name = "reason")
     private String reason;
+    @Column(name = "patient-id")
+    private Long patientID;
 
-    public Prescription(int id, String medication, String reason) {
-        this.id = id;
+    private String status;
+    public Prescription( String medication, String reason, Long patientID, String status) {
         this.medication = medication;
         this.reason = reason;
+        this.patientID = patientID;
+        this.status = status;
     }
 
-    public int getId() {
+    public Prescription() {
+
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Long getPatientID() {
+        return patientID;
+    }
+
+    public void setPatientID(Long patientID) {
+        this.patientID = patientID;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

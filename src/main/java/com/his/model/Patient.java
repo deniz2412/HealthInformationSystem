@@ -21,10 +21,14 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private List<Referral> referrals;
 
-    public Patient(Long id, String name, List<Appointment> appointments) {
-        this.id = id;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Patient( String name, List<Appointment> appointments, User user) {
         this.name = name;
         this.appointments = appointments;
+        this.user = user;
     }
 
     public Patient() {
@@ -33,6 +37,14 @@ public class Patient {
 
     public Long getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setId(Long id) {

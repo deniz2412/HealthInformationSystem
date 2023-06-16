@@ -1,5 +1,9 @@
 package com.his.controllers;
 
+import com.his.model.Doctor;
+import com.his.model.Patient;
+import com.his.repository.DoctorRepository;
+import com.his.repository.PatientRepository;
 import com.his.repository.UserRepository;
 import com.jfoenix.controls.*;
 import com.his.model.User;
@@ -34,8 +38,9 @@ public class LoginController implements Initializable {
     @FXML
     private Pane createAccountPane;
     private Stage primaryStage;
-    UserRepository userRepository = new UserRepository();
-
+    private UserRepository userRepository = new UserRepository();
+    private DoctorRepository doctorRepository = new DoctorRepository();
+    private PatientRepository patientRepository = new PatientRepository();
     @FXML
     private JFXComboBox<String> comboboxRole;
 
@@ -60,7 +65,7 @@ public class LoginController implements Initializable {
             boolean passwordMatch = PasswordUtil.verifyPassword(password, storedPasswordHash, salt);
             if (passwordMatch) {
                 String role = user.getRole();
-                showMainApplicationScreen(role, event);
+                showMainApplicationScreen(role, event,user);
             } else {
                 showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password");
             }
@@ -93,6 +98,17 @@ public class LoginController implements Initializable {
             User newUser = new User(username, passwordHash,salt, role);
             try{
                 userRepository.saveUser(newUser);
+                if(newUser.getRole().equals("Doctor")){
+                    Doctor doctor = new Doctor();
+                    doctor.setUser(newUser);
+                    doctor.setName(username.toUpperCase());
+                    doctorRepository.saveDoctor(doctor);
+                }else{
+                    Patient patient = new Patient();
+                    patient.setUser(newUser);
+                    patient.setName(username.toUpperCase());
+                    patientRepository.savePatient(patient);
+                }
                 showAlert(Alert.AlertType.INFORMATION, "Account Creation Successful", "Account created successfully!");
             } catch(Exception e)
             {
@@ -103,26 +119,30 @@ public class LoginController implements Initializable {
     }
 
 
-        private void showMainApplicationScreen(String role, ActionEvent event){
+        private void showMainApplicationScreen(String role, ActionEvent event, User user){
             try {
-                FXMLLoader loader;
-                if (role.equals("Doctor")) {
-                    loader = new FXMLLoader(getClass().getResource("doctor.fxml"));
-                } else if (role.equals("Patient")) {
-                    loader = new FXMLLoader(getClass().getResource("patient.fxml"));
+                FXMLLoader loader = null;
+                if (role.equals("Patient")) {
+                    loader = new FXMLLoader(getClass().getResource("/fxml/patient.fxml"));
+                    PatientController patientController = new PatientController(user);
+                    loader.setController(patientController);
+                } else if (role.equals("Doctor")) {
+                    loader = new FXMLLoader(getClass().getResource("/fxml/doctor.fxml"));
+                    DoctorController doctorController = new DoctorController(user);
+                    loader.setController(doctorController);
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Unkown role", "You have been assigned an unknown role, contact IT!");
-                    return;
                 }
                 Parent nextPage = loader.load();
+
                 Scene scene = new Scene(nextPage);
 
                 // Get the current stage
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
                 // Set the new scene on the stage
                 currentStage.setScene(scene);
                 currentStage.show();
+
             }
             catch (IOException e) {
                 e.printStackTrace();
