@@ -37,6 +37,11 @@ public class AppointmentRepository {
                 .getResultList();
     }
 
+    public Integer getCount(User user){
+        Integer count;
+        return entityManager.createQuery("SELECT COUNT(p) FROM Appointment p WHERE patient=:patient", Integer.class)
+                .setParameter("patientID",user.getPatient()).getSingleResult();
+    }
 
     public void close() {
         entityManager.close();

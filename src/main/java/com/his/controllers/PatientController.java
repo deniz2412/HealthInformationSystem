@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 
@@ -21,6 +22,15 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class PatientController implements Initializable {
+
+    @FXML
+    private Label pendingAppointments;
+    @FXML
+    private Label pendingPrescriptions;
+    @FXML
+    private Label pendingReferrals;
+    @FXML
+    private Label orderedPrescriptions;
 
     @FXML
     private JFXTreeTableView tableView;
@@ -34,6 +44,7 @@ public class PatientController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showAppointments();
+        refreshLabels();
     }
 
     public PatientController(User user) {
@@ -64,12 +75,14 @@ public class PatientController implements Initializable {
     }
 
     public void showAppointmentsForm(){
+        refreshLabels();
 
 
 
     }
 
     public void showPrescription(){
+        refreshLabels();
         tableView.getColumns().clear();
         List<String> columnNames = Arrays.asList("ID", "Medication","Reason","Status");
         List<String> propertyNames = Arrays.asList("id", "medication", "reason", "status");
@@ -82,6 +95,7 @@ public class PatientController implements Initializable {
     }
 
     public void showReferrals(){
+        refreshLabels();
         tableView.getColumns().clear();
         List<String> columnNames = Arrays.asList("ID", "Doctor","Reason");
         List<String> propertyNames = Arrays.asList("id","doctorname", "refferalReason");
@@ -97,7 +111,15 @@ public class PatientController implements Initializable {
 
     }
 
+    public void refreshLabels(){
+        pendingAppointments.setText(appointmentRepository.getCount(user).toString());
+        pendingPrescriptions.setText(prescriptionRepository.getCount(user).toString());
+        pendingReferrals.setText(referralsRepository.getCount(user).toString());
+        orderedPrescriptions.setText(prescriptionRepository.getOrderedCount(user).toString());
+
+    }
     public void showPrescriptionOrder(){
+        refreshLabels();
 
     }
 

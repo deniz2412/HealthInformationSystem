@@ -30,4 +30,17 @@ public class PrescriptionRepository {
                 .setParameter("patientID",user.getPatient().getId())
                 .getResultList();
     }
+    public Integer getCount(User user){
+        Integer count;
+        Long patientID = user.getPatient().getId();
+        return entityManager.createQuery("SELECT COUNT(p) FROM Prescription p WHERE patientID=:patientID", Integer.class)
+                .setParameter("patientID",user.getPatient().getId()).getSingleResult();
+    }
+
+    public Integer getOrderedCount(User user){
+        Integer count;
+        Long patientID = user.getPatient().getId();
+        return entityManager.createQuery("SELECT COUNT(p) FROM Prescription p WHERE patientID=:patientID AND status='Ordered'", Integer.class)
+                .setParameter("patientID",user.getPatient().getId()).getSingleResult();
+    }
 }
