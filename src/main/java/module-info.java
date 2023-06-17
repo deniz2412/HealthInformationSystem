@@ -3,6 +3,7 @@ module HealthInformationSystem {
     requires javafx.fxml;
     requires javafx.web;
     requires javafx.swing;
+    requires javafx.base;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -20,6 +21,6 @@ module HealthInformationSystem {
     exports com.his;
     opens com.his.controllers to javafx.fxml;
     exports com.his.controllers;
-    opens com.his.model to org.hibernate.orm.core;
+    opens com.his.model to org.hibernate.orm.core,javafx.base;
 
 }

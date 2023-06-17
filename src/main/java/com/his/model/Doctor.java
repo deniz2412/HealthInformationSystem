@@ -2,12 +2,11 @@ package com.his.model;
 
 import jakarta.persistence.*;
 
-
 import java.util.List;
 
 @Entity
-@Table(name = "patients")
-public class Patient {
+@Table(name = "doctors")
+public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,28 +14,24 @@ public class Patient {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "doctor")
     private List<Appointment> appointments;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "doctor")
     private List<Referral> referrals;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    public Patient( String name, List<Appointment> appointments, User user) {
+    public Doctor(String name, List<Appointment> appointments, List<Referral> referrals, User user) {
         this.name = name;
         this.appointments = appointments;
+        this.referrals = referrals;
         this.user = user;
     }
 
-    public Patient() {
+    public Doctor() {
 
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public User getUser() {
@@ -45,6 +40,9 @@ public class Patient {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {

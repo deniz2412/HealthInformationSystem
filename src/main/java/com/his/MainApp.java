@@ -1,6 +1,7 @@
 package com.his;
 
 import com.his.controllers.LoginController;
+import com.his.controllers.PatientController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,11 +14,13 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         //login
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/doctor.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
         Parent root = loader.load();
 
-        //LoginController loginController = loader.getController();
-        //loginController.setPrimaryStage(primaryStage);
+        LoginController loginController = loader.getController();
+        loginController.setPrimaryStage(primaryStage);
+       // PatientController patientController = loader.getController();
+       // patientController.setPrimaryStage(primaryStage);
 
         Scene scene = new Scene(root);
         primaryStage.setResizable(false);
