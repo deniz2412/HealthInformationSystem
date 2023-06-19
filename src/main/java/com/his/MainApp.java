@@ -1,7 +1,6 @@
 package com.his;
 
 import com.his.controllers.LoginController;
-import com.his.controllers.PatientController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

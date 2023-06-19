@@ -45,9 +45,9 @@ public class ReferralsRepository {
                .setParameter("patient",user.getPatient())
                .getResultList();
    }
-    public Integer getCount(User user){
-        Integer count;
-        return entityManager.createQuery("SELECT COUNT(p) FROM Referral p WHERE patient=:patient", Integer.class)
+    public Long getCount(User user){
+        Long count;
+        return entityManager.createQuery("SELECT COUNT(p) FROM Referral p WHERE patient=:patient", Long.class)
                 .setParameter("patient",user.getPatient()).getSingleResult();
     }
 }
