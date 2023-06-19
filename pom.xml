@@ -85,6 +85,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.burningwave</groupId>
+            <artifactId>core</artifactId>
+            <version>12.62.7</version>
+        </dependency>
+        <dependency>
         <groupId>eu.hansolo</groupId>
         <artifactId>toolbox</artifactId>
         <version>17.0.43</version>

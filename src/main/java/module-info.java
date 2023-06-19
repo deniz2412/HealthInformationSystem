@@ -14,6 +14,7 @@ module HealthInformationSystem {
     requires com.jfoenix;
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
+    requires org.burningwave.core;
 
 
 

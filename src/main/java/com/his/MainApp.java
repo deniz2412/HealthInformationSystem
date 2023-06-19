@@ -9,10 +9,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
 public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        org.burningwave.core.assembler.StaticComponentContainer.Modules.exportAllToAll();
         //login
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
         Parent root = loader.load();
