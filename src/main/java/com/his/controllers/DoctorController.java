@@ -8,7 +8,11 @@ public class DoctorController {
     public DoctorController(User user) {
         this.user = user;
     }
-
-
+    /* TODO
+    *   Refferal creation form
+    *   Prescription creation form
+    *   View Apppointments
+    *
+    *  */
 
 }
