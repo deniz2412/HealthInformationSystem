@@ -9,7 +9,6 @@ This project is a Hospital Information System designed to manage patient records
 - [FXHTML for JavaFX](#fxhtml-for-javafx)
 - [Connecting to Database](#connecting-to-database)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Planned Features](#planned-features)
 
 ## Controllers
